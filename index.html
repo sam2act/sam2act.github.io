@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>SAM2Act</title>
+    <meta name="description" content="SAM2Act">
+    <meta name="keywords" content="Foundation Model, Affordance Prediction">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+    <link rel="stylesheet" href="./static/css/bulma.min.css">
+    <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+    <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+    <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+    <link rel="stylesheet" href="./static/css/index.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script defer src="./static/js/fontawesome.all.min.js"></script>
+    <script src="./static/js/bulma-carousel.min.js"></script>
+    <script src="./static/js/bulma-slider.min.js"></script>
+    <script src="./static/js/index.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+
+    <script type="text/javascript">
+        function init() {
+            const video_sam2act = document.getElementById("simulation-menu-video-sam2act");
+            video_sam2act.addEventListener("error", () => {
+                console.log("Error loading video: ", video_sam2act.src);
+            }, true);
+
+            const video_baseline = document.getElementById("simulation-menu-video-baseline");
+            video_baseline.addEventListener("error", () => {
+                console.log("Error loading video: ", video_baseline.src);
+            }, true);
+
+            const video_comparison_sam2act = document.getElementById("comparison-menu-video-sam2act");
+            video_comparison_sam2act.addEventListener("error", () => {
+                console.log("Error loading video: ", video_comparison_sam2act.src);
+            }, true);
+
+            const video_comparison_rvt2 = document.getElementById("comparison-menu-video-rvt2");
+            video_comparison_rvt2.addEventListener("error", () => {
+                console.log("Error loading video: ", video_comparison_rvt2.src);
+            }, true);
+        }
+
+        function updateTaskVideo() {
+            const task = document.getElementById("simulation-menu-task-name").value;
+            const baseline = document.getElementById("simulation-menu-baseline-name").value;
+
+            const video_sam2act = document.getElementById("simulation-menu-video-sam2act");
+            video_sam2act.src = `static/videos/simulation/sam2act/${task}_fixed.mp4`;;
+            video_sam2act.playbackRate = 1.75;
+            video_sam2act.play();
+
+            const video_baseline = document.getElementById("simulation-menu-video-baseline");
+            video_baseline.src = `static/videos/simulation/${baseline}/${task}_fixed.mp4`;
+            video_baseline.playbackRate = 1.75;
+            video_baseline.play();
+        }
+
+        function updateComparisonVideo() {
+            const task = document.getElementById("comparison-menu-task-name").value;
+            const episode = document.getElementById("comparison-menu-episode-name").value;
+
+            const video_sam2act = document.getElementById("comparison-menu-video-sam2act");
+            video_sam2act.src = `static/videos/comparison/${task}/vid_sam2act_in_distribution_${episode}.mp4`;
+            video_sam2act.playbackRate = 1.75;
+            video_sam2act.play();
+
+            const video_rvt2 = document.getElementById("comparison-menu-video-rvt2");
+            video_rvt2.src = `static/videos/comparison/${task}/vid_rvt2_in_distribution_${episode}.mp4`;
+            video_rvt2.playbackRate = 1.75;
+            video_rvt2.play();
+        }
+
+    </script>
+
+
+
+</head>
+
+<body onload="init(); updateTaskVideo();">
+    <!-- Title / Authors Info -->
+    <section class="hero">
+        <div  class="hero-body">
+            <div class="container is-max-desktop">
+                <div class="columns is-centered">
+                    <div class="column has-text-centered">
+                        <h1 class="title is-1 publication-title">
+                        <!--<img src="static/images/emoji.png" alt="Emoji" style="width: 45px; height: 45px; vertical-align: middle;">-->
+                            SAM2Act: Integrating Visual Foundation Models with A Memory Architecture for Robotic Manipulation
+                        </h1>
+                        <div class="is-size-5 publication-authors">
+                            <div class="column has-text-centered">
+                                <h3><b>Anonymous Submission</b></h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container is-max-desktop">
+            <!-- Video Teaser -->
+            <video id="teaser" autoplay muted loop height="100">
+                <source src="static/videos/vid_intro.mp4" type="video/mp4">
+            </video>
+            <!-- /Video Teaser -->
+            <br/>
+            <br/>
+            <!-- Abstract. -->
+            <div class="columns is-centered has-text-centered">
+                <div class="column is-four-fifths">
+                    <h2 class="title is-3">Abstract</h2>
+                    <div class="content has-text-justified">
+                        <p>
+                            Robotic manipulation systems operating in diverse, dynamic environments must exhibit three critical
+                            abilities: generalization to unseen scenarios, multitask interaction, and spatial memory. While significant
+                            progress has been made in robotic manipulation, existing approaches often fall short in addressing
+                            memory-dependent tasks and generalization to complex environmental variations. To bridge this gap,
+                            we introduce <b>SAM2Act</b>, a multi-view robotic transformer that leverages multi-resolution upsampling
+                            and visual representations from large-scale foundation models. SAM2Act achieves a state-of-the-art average
+                            success rate of <b>86.8% across 18 tasks</b> in the RLBench benchmark, and demonstrates robust generalization
+                            on <i>The Colosseum benchmark</i>, with only a <b>4.3\% performance gap</b> under diverse environmental
+                            perturbations. Building on this foundation, we propose <b>SAM2Act+</b>, a memory-augmented architecture
+                            inspired by SAM2, which incorporates a memory bank and attention mechanism for spatial memory. To address
+                            the need for evaluating memory-dependent tasks, we introduce <i>MemoryBench</i>, a novel benchmark designed
+                            to assess spatial memory and action recall in robotic manipulation. SAM2Act+ achieves <b>competitive performance on MemoryBench</b>,
+                            significantly outperforming existing approaches and pushing the boundaries of memory-enabled robotic systems.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <!--/ Abstract. -->
+        </div>
+    </section>
+
+    <section class="hero is-light is-small">
+        <div class="hero-body">
+            <div class="container">
+                <div class="column has-text-centered">
+                    <h3 class="title is-5">Real World Results</h3>
+                </div>
+                <div id="results-carousel" class="carousel results-carousel">
+                    <div class="item item-steve">
+                        <video id="steve" autoplay muted loop>
+                            <source src="static/videos/real_world/vid_rw_press_buttons.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="item item-fullbody">
+                        <video id="fullbody" autoplay muted loop>
+                            <source src="static/videos/real_world/vid_rw_press_button_block.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="item item-shiba">
+                        <video id="shiba" autoplay muted loop>
+                            <source src="static/videos/real_world/vid_rw_stack_block.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="item item-ender">
+                        <video id="ender" autoplay muted loop>
+                            <source src="static/videos/real_world/vid_rw_turn_lamp.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                </div>
+                <br>
+                <br>
+                <div class="column has-text-centered">
+                    <h3 class="title is-5">Memory Tasks</h3>
+                </div>
+                <div id="results-carousel" class="carousel results-carousel">
+                    <div class="item item-patrick">
+                        <video id="patrick" autoplay muted loop>
+                            <source src="static/videos/memory_tasks/button_and_drawer_simple.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="item item-fullcuerpo">
+                        <video id="fullcuerpo" autoplay muted loop>
+                            <source src="static/videos/memory_tasks/play_with_cube_sequence.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="item item-shibar">
+                        <video id="shibar" autoplay muted loop>
+                            <source src="static/videos/memory_tasks/play_with_two_cubes.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="item item-enderman">
+                        <video id="enderman" autoplay muted loop>
+                            <source src="static/videos/memory_tasks/button_and_drawer_simple.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Simulation Results -->
+    <section class="section">
+        <div class="container is-max-widescreen">
+            <h2 class="title">Results on RLBench 18 tasks</h2>
+            Task
+            <div class="select is-small">
+                <select id="simulation-menu-task-name" onchange="updateTaskVideo()">
+                    <option value="close_jar" selected="selected">Close jar</option>
+                    <option value="insert_onto_square_peg">Insert peg</option>
+                    <option value="meat_off_grill">Meat off grill</option>
+                    <option value="open_drawer">Open drawer</option>
+                    <option value="place_cups">Place cups</option>
+                    <option value="place_shape_in_shape_sorter">Place shape</option>
+                    <option value="place_wine_at_rack_location">Place wine</option>
+                    <option value="push_buttons">Push buttons</option>
+                    <option value="put_groceries_in_cupboard">Put groceries</option>
+                    <option value="put_item_in_drawer">Item in drawer</option>
+                    <option value="put_money_in_safe">Place money</option>
+                    <option value="reach_and_drag">Reach and drag</option>
+                    <option value="slide_block_to_color_target">Slide block</option>
+                    <option value="stack_blocks">Stack blocks</option>
+                    <option value="stack_cups">Stack cups</option>
+                    <option value="sweep_to_dustpan_of_size">Sweep dustpan</option>
+                    <option value="turn_tap">Turn tap</option>
+                </select>
+            </div>
+            Baseline
+            <div class="select is-small">
+                <select id="simulation-menu-baseline-name" onchange="updateTaskVideo()">
+                    <option value="rvt" selected="selected">RVT</option>
+                    <option value="same">SAME</option>
+                </select>
+            </div>
+            <div class="columns is-centered">
+                <div class="column">
+                    <div class="columns is-centered">
+                        <div class="column content">
+                            <h2 class="title is-3">Ours</h2>
+                            <video id="simulation-menu-video-sam2act" muted autoplay loop>
+                                <source src="static/videos/simulation/sam2act/close_jar_fixed.mp4" type="video/mp4">
+                            </video>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="column">
+                    <div class="columns is-centered">
+                        <div class="column content">
+                            <h2 class="title is-3">Baseline</h2>
+                            <video id="simulation-menu-video-baseline" muted autoplay loop>
+                                <source src="static/videos/simulation/rvt/close_jar_fixed.mp4" type="video/mp4">
+                            </video>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Comparison -->
+    <section class="section">
+        <div class="container is-max-widescreen">
+            <h2 class="title">In distribution real-world results</h2>
+            Task
+            <div class="select is-small">
+                <select id="comparison-menu-task-name" onchange="updateComparisonVideo()">
+                    <option value="turn_lamp" selected="selected">Turn lamp</option>
+                    <option value="push_buttons">Push buttons</option>
+                </select>
+            </div>
+            Episode
+            <div class="select is-small">
+                <select id="comparison-menu-episode-name" onchange="updateComparisonVideo()">
+                    <option value="ep0" selected="selected">Episode 1</option>
+                    <option value="ep1">Episode 2</option>
+                    <option value="ep2">Episode 3</option>
+                </select>
+            </div>
+            <div class="columns is-centered">
+                <div class="column">
+                    <div class="columns is-centered">
+                        <div class="column content">
+                            <h2 class="title is-3">SAM2Act</h2>
+                            <video id="comparison-menu-video-sam2act" muted autoplay loop>
+                                <source src="static/videos/comparison/turn_lamp/vid_sam2act_in_distribution_ep0.mp4" type="video/mp4">
+                            </video>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="column">
+                    <div class="columns is-centered">
+                        <div class="column content">
+                            <h2 class="title is-3">RVT2</h2>
+                            <video id="comparison-menu-video-rvt2" muted autoplay loop>
+                                <source src="static/videos/comparison/turn_lamp/vid_rvt2_in_distribution_ep0.mp4" type="video/mp4">
+                            </video>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</body>
+</html>
