@@ -162,6 +162,17 @@
             const task = document.getElementById("outdistribution-menu-task-name").value;
             const episode = document.getElementById("outdistribution-menu-episode-name").value;
 
+            if (task == "push_buttons") {
+                const episode_elm = document.getElementById("outdistribution-menu-episode-name");
+                episode_elm.options[1].disabled = true;
+                episode_elm.options[2].disabled = true;
+            }
+            else {
+                const episode_elm = document.getElementById("outdistribution-menu-episode-name");
+                episode_elm.options[1].disabled = false;
+                episode_elm.options[2].disabled = false;
+            }
+
             const video_sam2act = document.getElementById("outdistribution-menu-video-sam2act");
             video_sam2act.src = `static/videos/out_of_distribution/${task}/vid_sam2act_turn_on_out_${episode}.mp4`;
             video_sam2act.playbackRate = 1.75;
@@ -612,7 +623,7 @@
             <div class="select is-small">
                 <select id="outdistribution-menu-task-name" onchange="updateComparisonOutDistVideo()">
                     <option value="turn_lamp" selected="selected">Turn lamp</option>
-                    <!--<option value="push_buttons">Push buttons</option>-->
+                    <option value="push_buttons">Push buttons</option>
                     <!--<option value="stack_cube">Stack cube</option>-->
                 </select>
             </div>
