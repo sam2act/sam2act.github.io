@@ -27,6 +27,14 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
     <script>hljs.highlightAll();</script> -->
 
+
+    <script type="text/javascript" async 
+        src="https://polyfill.io/v3/polyfill.min.js?features=es6">
+    </script>
+    <script type="text/javascript" async 
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js">
+    </script>
+
     <script type="text/javascript">
         function init() {
             const video_sam2act = document.getElementById("simulation-menu-video-sam2act");
@@ -107,7 +115,7 @@
                 "basketball_in_hoop_0_s2",
                 // "close_box_1_s0",
                 "close_box_1_s1",
-                "close_box_1_s2",
+                // "close_box_1_s2",
                 "close_laptop_lid_2_s0",
                 "close_laptop_lid_2_s1",
                 // "close_laptop_lid_2_s2",
@@ -365,74 +373,185 @@
 
     <section class="section">
         <div class="container is-max-desktop">
+            <h2 class="title is-3">Summary</h2>
             <div class="columns is-centered has-text-centered">
                 <div class="column">
-                    <h2 class="title is-3">Summary</h2>
                     <p>
                         <figure>
                             <img src="static/images/img_summary.png" style="max-width: 100%; height: auto;">
                         </figure>
                         <br>
                         <div class="content has-text-justified">
-                            SAM2Act, a multi-view robotics transformer that enhances feature representation by integrating multi-resolution 
-                            upsampling with visual embeddings from large-scale foundation models. Built on the RVT-2 multiview transformer, 
-                            SAM2Act achieves strong multitask success and generalization. Building on this foundation, we introduce SAM2Act+, 
-                            which incorporates a memory-based architecture inspired by the SAM2 approach. Using a memory bank and an attention 
-                            mechanism, SAM2Act + enables episodic recall to solve more complex, spatial memory-dependent manipulation tasks.
+                            We introduce SAM2Act, a multi-view robotics transformer-based policy that enhances feature
+                            representation by integrating multi-resolution upsampling with visual embeddings from large-scale
+                            foundation models. Built on the RVT-2 multi-view transformer, SAM2Act achieves strong multitask
+                            success and generalization. Building on this foundation, we introduce SAM2Act+, which incorporates
+                            a memory-based architecture inspired by SAM2's approach. Using a memory bank, an encoder,
+                            and an attention mechanism, SAM2Act+ enables episodic recall to solve spatial memory-dependent
+                            manipulation tasks.
                         </div>
                     </p>
                 </div>
             </div>
-
+            
+            <h2 class="title is-3">Overview of SAM2Act and SAM2Act+</h2>
             <div class="columns is-centered has-text-centered">
                 <div class="column">
-                    <h2 class="title is-3">Overview of SAM2Act and SAM2Act+</h2>
                     <p>
                         <figure>
                             <img src="static/images/img_pipeline.png" style="max-width: 100%; height: auto;">
                         </figure>
                         <br>
                         <div class="content has-text-justified">
-                            The SAM2Act architecture leverages the SAM2 image encoder to generate prompt-conditioned, multi-resolution embeddings, fine-tuned 
-                            with LoRA for efficient adaptation to manipulation tasks. A multi-view transformer aligns spatial coordinates with language 
-                            instructions, while a cascaded multi-resolution upsampling mechanism refines feature maps and generates accurate translation heatmaps. 
-                            SAM2Act+ extends this architecture by incorporating memory-based components, including the Memory Encoder, Memory Attention, and Memory 
-                            Bank, into the coarse branch. These components enable memory-driven reasoning by processing historical heatmaps and integrating prior 
-                            observations, allowing the agent to predict actions based on stored contextual information. Observations are reconstructed into point 
-                            clouds, rendered into three virtual images, and lifted into 3D translation points, enabling precise spatial reasoning across both architectures.
+                            Our method, SAM2Act, enables precise 3D manipulation with strong generalization across environ-
+                            mental and object-level variations. Building upon the RVT-2 framework, SAM2Act introduces
+                            key architectural innovations that enhance visual feature representation and task-specific reasoning.
+                            The architecture reconstructs a point cloud of the scene, renders it from virtual cameras at orthogonal
+                            views, and employs a two-stage multi-view transformer (coarse-to-fine) to predict action heatmaps.
+                            The coarse branch generates zoom-in heatmaps to localize regions of interest, while the fine branch
+                            refines these into precise action heatmaps. 
+                            <br></br>
+                            SAM2Act leverages the pre-trained SAM2 encoder
+                            to extract multi-resolution image embeddings, which are further refined through the multi-resolution
+                            upsampling technique to predict accurate translation heatmaps with minimal information loss. To ad-
+                            dress tasks requiring spatial memory, SAM2Act+ extends the SAM2Act architecture by incorporating
+                            memory-based components. These include Memory Bank, Memory Encoder, and Memory Attention,
+                            enabling the model to encode historical actions and condition current observations. This memory-
+                            based policy enhances the agent's ability to predict actions based on past contextual information,
+                            significantly improving performance in tasks that require sequential decision-making.
                         </div>
                     </p>
                 </div>
             </div>
 
+            <h2 class="title is-3"><i>MemoryBench</i></h2>
             <div class="columns is-centered has-text-centered">
                 <div class="column">
-                    <h2 class="title is-3">Experiments and Results</h2>
                     <p>
                         <figure>
-                            <img src="static/images/img_results.png"></a>
+                            <img src="static/images/img_memorybench.png" style="max-width: 100%; height: auto;">
                         </figure>
                         <br>
-                        <p>
-                            SAM2Act outperform all other baselines, and achieve highest performance on the RLBench 18 tasks.
-                        </p>
+                        <div class="content has-text-justified">
+                            Unlike standard RLBench tasks, many of which involve long-horizon scenarios, our tasks are
+                            specifically designed to require spatial memory. Without such memory, the agent would be forced to
+                            rely on random actions. To create these tasks, we intentionally violate the Markov assumption, which
+                            states that in a Markov Decision Process (MDP), the next observation depends solely on the current
+                            observation and action:
+                            <p>$$ P\bigl(o_{t+1} \mid o_1, a_1, \dots, o_t, a_t\bigr) \;=\; P\bigl(o_{t+1} \mid o_t, a_t\bigr). $$</p>
+                            This assumption implies that knowing only ot and at is sufficient to predict \( o_{t+1} \). However, in our
+                            tasks, we design scenarios where two distinct action histories lead to the same observation ot, but
+                            require different subsequent actions. This forces the agent to recall which action history led to ot to
+                            perform the correct next action. Furthermore, we standardized the language instructions to prevent
+                            unintentional leakage of spatial information that could aid the model in memory-based tasks. These
+                            principles guided the development of our spatial memory-based tasks.
+                        </div>
                     </p>
-                    <br>
-                    <br>
+                </div>
+            </div>
+            
+
+            <h2 class="title is-3">Experiments and Results</h2>
+            <h2 class="title is-4">RLBench 18 Tasks</h2>
+            <div class="columns is-centered has-text-centered">
+                <div class="column">
+                    <p>
+                        <figure>
+                            <img src="static/images/img_results_rlbench.png"></a>
+                        </figure>
+                        <br>
+                        <div class="content has-text-justified">
+                            Overall, SAM2Act achieves an average success rate of <b>86.8%</b>±0.5, surpassing the previous best
+                            (RVT-2) by <b>5.4%</b>. A closer look at individual tasks reveals that SAM2Act ranks <b>first in 9 out of 18
+                            tasks</b> and remains <b>highly competitive in 7 others</b>, coming within one successful attempt or 4% of
+                            the best performance. These tasks include Close Jar, Drag Stick, Meat Off Grill, Place Wine, Screw
+                            Bulb, Sweep to Dustpan, and Turn Tap. The largest margin of improvement occurs in Insert Peg,
+                            where SAM2Act <b>exceeds RVT-2 by 44%</b> (approximately <b>2.1×</b>), and in Sort Shape, where it
+                            outperforms RVT-2 by 29%. Both tasks require precise manipulation, underscoring the effectiveness
+                            of SAM2Act's multi-resolution upsampling strategy. These results establish SAM2Act as a <b>leading
+                            policy for complex 3D tasks</b>, highlighting its ability to handle high-precision manipulations - an area
+                            where prior methods have struggled.
+                        </div>
+                    </p>
+                </div>
+            </div>
+
+            <h2 class="title is-4"><i>The Colosseum</i></h2>
+            <div class="columns is-centered has-text-centered">
+                <div class="column">
                     <p>
                         <figure>
                             <img src="static/images/img_results_colosseum.png"></a>
                         </figure>
                         <br>
-                        <p>
-                            SAM2Act outperform all other baseline, and achieve SoTA performance on the The Colosseum.
-                        </p>
+                        <div class="content has-text-justified">
+                            The results evaluated in the above figure were obtained by training and testing models within the
+                            same environment. However, to truly assess <b>generalization performance</b>, policies must remain
+                            robust against both environmental and object-level perturbations. We therefore trained SAM2Act
+                            and the baseline methods on 20 tasks from The Colosseum benchmark and tested them under 13
+                            different perturbation categories over three runs. <b>SAM2Act exhibits the smallest performance
+                            drop compared to the baselines</b>, with an average decrease of <b>4.3%</b> (standard deviation of 3.59%).
+                            Notably, it proves particularly robust to environmental perturbations – such as changes in lighting,
+                            table color/texture, the addition of distractors, and even camera pose – while also maintaining
+                            competitive performance under object-level perturbations. 
+                        </div>
                     </p>
                 </div>
             </div>
-        </div>
 
+            <h2 class="title is-4"><i>MemoryBench</i></h2>
+            <div class="columns is-centered has-text-centered">
+                <div class="column">
+                    <p>
+                        <figure>
+                            <img src="static/images/img_results_memorybench.png"></a>
+                        </figure>
+                        <br>
+                        <div class="content has-text-justified">
+                            In the figure above, we evaluate SAM2Act+ against SoTA 3D BC model, RVT-2 on MemoryBench, training all
+                            models in a single-task setting to isolate memory-related challenges (e.g., opening the wrong drawer
+                            rather than unrelated mid-task failures). This setup ensures that performance differences stem from
+                            memory capabilities. For a random agent, the expected success rates are determined by the number
+                            of possible choices per task: 33% for reopen_drawer (three drawers), 25% for put_block_back
+                            (four patches), and 50% for rearrange_block (two blocks). However, variations in task complexity,
+                            fixed training data, and imbalanced task distributions lead to slight deviations from these baselines.
+                            Our proposed memory-based model, SAM2Act+, demonstrates <b>a strong understanding of spatial
+                            memory</b>, achieving an average success rate of <b>91.3%</b> across all tasks. It <b>outperforms SAM2Act
+                            (without memory) by a huge margin of 37.6%</b> on MemoryBench, highlighting the significant
+                            impact of explicit memory modeling.
+                        </div>
+                    </p>
+                </div>
+            </div>
+
+            <h2 class="title is-4">Real-robot</h2>
+            <div class="columns is-centered has-text-centered">
+                <div class="column">
+                    <p>
+                        <figure>
+                            <img src="static/images/img_results_real.png" style="max-width: 60%; height: auto;"></a>
+                        </figure>
+                        <br>
+                        <div class="content has-text-justified">
+                            The table above presents our real-world experiment results, where our method achieves a 75% task success
+                            rate, compared to 43% for RVT-2. SAM2Act significantly outperforms the baseline in high-precision
+                            tasks (60% vs 0%). It excels in memory-based tasks, such as (d) Push the same button, which
+                            requires recalling the button's previous location. Here, SAM2Act achieves 70% success, while RVT-2,
+                            relying on random guessing, scores 40%. We also test models' generalization against perturbations
+                            like lighting changes, distractors, and position variations. Additional details are in the Appendix F,
+                            with real-world rollout videos available on our project website.
+                        </div>
+                    </p>
+                </div>
+            </div>
+
+        </div>
     </section>
+
+
+    <div class="columns is-centered has-text-centered">
+        <h2 class="title is-4">More Result Videos ⬇️</h2>
+    </div>
 
     <!-- Simulation Results -->
     <section class="section">
