@@ -249,7 +249,7 @@
                             <span class="link-block">
                                 <a target="_blank" href="https://github.com/sam2act/sam2act" class="external-link button is-normal is-rounded is-dark">
                                     <span class="icon"><i class="fab fa-github"></i></span>
-                                    <span>Code (Coming Soon)</span>
+                                    <span>Code</span>
                                 </a>
                             </span>
                             <!-- MemoryBench Link. -->
@@ -423,8 +423,8 @@
                             <br></br>
                             SAM2Act leverages the pre-trained SAM2 encoder
                             to extract multi-resolution image embeddings, which are further refined through the multi-resolution
-                            upsampling technique to predict accurate translation heatmaps with minimal information loss. To ad-
-                            dress tasks requiring spatial memory, SAM2Act+ extends the SAM2Act architecture by incorporating
+                            upsampling technique to predict accurate translation heatmaps with minimal information loss. To 
+                            address tasks requiring spatial memory, SAM2Act+ extends the SAM2Act architecture by incorporating
                             memory-based components. These include Memory Bank, Memory Encoder, and Memory Attention,
                             enabling the model to encode historical actions and condition current observations. This memory-
                             based policy enhances the agent's ability to predict actions based on past contextual information,
@@ -526,9 +526,10 @@
                             (four patches), and 50% for rearrange_block (two blocks). However, variations in task complexity,
                             fixed training data, and imbalanced task distributions lead to slight deviations from these baselines.
                             Our proposed memory-based model, SAM2Act+, demonstrates <b>a strong understanding of spatial
-                            memory</b>, achieving an average success rate of <b>91.3%</b> across all tasks. It <b>outperforms SAM2Act
-                            (without memory) by a huge margin of 37.6%</b> on MemoryBench, highlighting the significant
-                            impact of explicit memory modeling.
+                            memory</b>, achieving an average success rate of <b>94.3%</b> across all tasks. It <b>outperforms SAM2Act
+                            (without memory) by a huge margin of 39.3%</b> on MemoryBench, highlighting the significant
+                            impact of explicit memory modeling. Note that we made an update to <i>open_drawer</i> task, see more 
+                            in our paper's appendix.
                         </div>
                     </p>
                 </div>
@@ -545,7 +546,7 @@
                         <div class="content has-text-justified">
                             The table above presents our real-world experiment results, where our method achieves a 75% task success
                             rate, compared to 43% for RVT-2. SAM2Act significantly outperforms the baseline in high-precision
-                            tasks (60% vs 0%). It excels in memory-based tasks, such as (d) Push the same button, which
+                            tasks (60% vs 0%). SAM2Act+ (indicated with *) excels in memory-based tasks, such as (d) Push the same button, which
                             requires recalling the button's previous location. Here, SAM2Act achieves 70% success, while RVT-2,
                             relying on random guessing, scores 40%. We also test models' generalization against perturbations
                             like lighting changes, distractors, and position variations.
